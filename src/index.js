@@ -9,22 +9,39 @@ import {
   printCurrentFolder,
 } from "./errors-and-checks.js";
 
+const YELLOW = "\x1b[33m";
+const DEFAULT_COLOR = "\x1b[0m";
+
 const login = () => {
-  const args = process.argv[2];
-  const userName = args.slice(11);
+  const args = process.argv.slice(2);
+  let userName;
+  args.map((name, index) => {
+    const values = name.split("=");
+    if (values[0] === "--username") {
+      userName = values[1];
+    }
+  });
+
+  if (userName.length === 0) {
+    invalidInputException();
+    return;
+  }
 
   let __dirname = path.resolve(process.env.HOME || process.env.USER_PROFILE);
 
-  console.log(`Welcome to the File Manager, ${userName}!`);
+  console.log(
+    `Welcome to the File Manager, ${YELLOW}${userName}${DEFAULT_COLOR}!`,
+  );
   printCurrentFolder(__dirname);
 
   process.stdin.on("data", async (chunk) => {
     const input = chunk.toString().trim();
-    // TODO: validate splitInput
     const splitInput = input.split(" ");
 
     if (splitInput[0] === ".exit" && splitInput.length === 1) {
-      console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
+      console.log(
+        `Thank you for using File Manager, ${YELLOW}${userName}${DEFAULT_COLOR}, goodbye!`,
+      );
       process.exit();
     } else if (splitInput[0] === "up" && splitInput.length === 1) {
       __dirname = up(__dirname);

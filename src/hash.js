@@ -12,12 +12,7 @@ import {
 const calculateHash = (currentDir, pathToFile) => {
   const fullPath = formAbsolutePath(currentDir, pathToFile);
 
-  if (!checkRoot(fullPath)) {
-    invalidInputException();
-    return;
-  }
-
-  if (!checkExistsFile(fullPath)) {
+  if (!checkRoot(fullPath) || !checkExistsFile(fullPath)) {
     invalidInputException();
     return;
   }

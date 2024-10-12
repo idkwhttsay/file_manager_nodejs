@@ -15,12 +15,9 @@ const compress = (currentDir, pathToFile, pathToDestination) => {
   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
   let fullPathToDestination = formAbsolutePath(currentDir, pathToDestination);
 
-  if (!checkExistsFile(fullPathToFile) || !checkRoot(fullPathToFile)) {
-    invalidInputException();
-    return;
-  }
-
   if (
+    !checkExistsFile(fullPathToFile) ||
+    !checkRoot(fullPathToFile) ||
     !checkExistsDirectory(fullPathToDestination) ||
     !checkRoot(fullPathToDestination)
   ) {
@@ -54,15 +51,9 @@ const decompress = (currentDir, pathToFile, pathToDestination) => {
   if (
     !checkExistsFile(fullPathToFile) ||
     !checkRoot(fullPathToFile) ||
-    path.extname(fullPathToFile) !== ".br"
-  ) {
-    invalidInputException();
-    return;
-  }
-
-  if (
     !checkExistsDirectory(fullPathToDestination) ||
-    !checkRoot(fullPathToDestination)
+    !checkRoot(fullPathToDestination) ||
+    path.extname(fullPathToFile) !== ".br"
   ) {
     invalidInputException();
     return;

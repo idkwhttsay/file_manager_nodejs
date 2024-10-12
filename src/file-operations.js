@@ -37,7 +37,11 @@ const cat = (currentDir, pathToFile) => {
 const add = (currentDir, fileName) => {
   const fullPath = formAbsolutePath(currentDir, fileName);
 
-  if (!checkRoot(fullPath) || checkExistsFile(fullPath)) {
+  if (
+    !checkRoot(fullPath) ||
+    checkExistsFile(fullPath) ||
+    fileName.includes("/")
+  ) {
     invalidInputException();
     return;
   }
@@ -51,13 +55,23 @@ const add = (currentDir, fileName) => {
   });
 };
 
-// TODO: validate paths
 const rename = (currentDir, pathToFile, newFileName) => {
   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
+
+  if (!checkExistsFile(fullPathToFile) || newFileName.includes("/")) {
+    invalidInputException();
+    return;
+  }
+
   const pathToRenamedFile = formAbsolutePath(
     path.join(fullPathToFile, "../"),
     newFileName,
   );
+
+  if (!checkRoot(pathToRenamedFile)) {
+    invalidInputException();
+    return;
+  }
 
   fs.rename(fullPathToFile, pathToRenamedFile, (error) => {
     if (error) {

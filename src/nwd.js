@@ -36,17 +36,12 @@ const up = (currentDir) => {
 const cd = (currentDir, pathToDirectory) => {
   const fullPath = formAbsolutePath(currentDir, pathToDirectory);
 
-  if (!checkExistsDirectory(fullPath)) {
+  if (!checkRoot(fullPath) || !checkExistsDirectory(fullPath)) {
     invalidInputException();
     return currentDir;
   }
 
-  if (checkRoot(fullPath)) {
-    return fullPath;
-  } else {
-    invalidInputException();
-    return currentDir;
-  }
+  return fullPath;
 };
 
 export { ls, up, cd };

@@ -3,7 +3,7 @@ import { invalidInputException } from "./errors-and-checks.js";
 
 const printOS = (operation) => {
   if (operation === "--EOL") {
-    console.log(os.EOL);
+    console.log(os.EOL.toString());
   } else if (operation === "--cpus") {
     const cpus = os.cpus();
     const cpusTable = cpus.map((cpus) => {
