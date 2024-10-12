@@ -1,4 +1,5 @@
 import { up, ls, cd } from "./nwd.js";
+import { calculateHash } from "./hash.js";
 import path from "path";
 import {
   printArchitecture,
@@ -46,9 +47,11 @@ const login = () => {
       } else {
         console.log("Invalid input");
       }
+    } else if (input.slice(0, 4) === "hash") {
+      calculateHash(__dirname, input.slice(5));
     }
 
-    console.log(`You are currently in ${__dirname}`);
+    console.log(`You are currently in ${__dirname}\n`);
   });
 };
 
