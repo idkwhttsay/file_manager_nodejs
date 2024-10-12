@@ -20,46 +20,40 @@ const login = () => {
 
   process.stdin.on("data", async (chunk) => {
     const input = chunk.toString().trim();
+    // TODO: validate splitInput
+    const splitInput = input.split(" ");
 
-    if (input === ".exit") {
+    if (splitInput[0] === ".exit" && splitInput.length === 1) {
       console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
       process.exit();
-    } else if (input === "up") {
+    } else if (splitInput[0] === "up" && splitInput.length === 1) {
       __dirname = up(__dirname);
-    } else if (input === "ls") {
+    } else if (splitInput[0] === "ls" && splitInput.length === 1) {
       console.table(await ls(__dirname));
-    } else if (input.slice(0, 2) === "cd") {
-      const newPath = cd(__dirname, input.slice(3));
+    } else if (splitInput[0] === "cd" && splitInput.length === 2) {
+      const newPath = cd(__dirname, splitInput[1]);
       if (newPath != null) {
         __dirname = newPath;
       }
-    } else if (input.slice(0, 2) === "os") {
-      printOS(input.slice(3));
-    } else if (input.slice(0, 4) === "hash") {
-      calculateHash(__dirname, input.slice(5));
-    } else if (input.slice(0, 8) === "compress") {
-      const splitInput = input.split(" ");
-      // TODO: validate splitInput
-      compress(__dirname, splitInput[1].toString(), splitInput[2].toString());
-    } else if (input.slice(0, 10) === "decompress") {
-      const splitInput = input.split(" ");
-      // TODO: validate splitInput
-      decompress(__dirname, splitInput[1].toString(), splitInput[2].toString());
-    } else if (input.slice(0, 3) === "cat") {
-      cat(__dirname, input.slice(4));
-    } else if (input.slice(0, 3) === "add") {
-      add(__dirname, input.slice(4));
-    } else if (input.slice(0, 2) === "rn") {
-      const splitInput = input.split(" ");
-      rename(__dirname, splitInput[1].toString(), splitInput[2].toString());
-    } else if (input.slice(0, 2) === "cp") {
-      const splitInput = input.split(" ");
+    } else if (splitInput[0] === "os" && splitInput.length === 2) {
+      printOS(splitInput[1]);
+    } else if (splitInput[0] === "hash" && splitInput.length === 2) {
+      calculateHash(__dirname, splitInput[1]);
+    } else if (splitInput[0] === "compress" && splitInput.length === 3) {
+      compress(__dirname, splitInput[1], splitInput[2]);
+    } else if (splitInput[0] === "decompress" && splitInput.length === 3) {
+      decompress(__dirname, splitInput[1], splitInput[2]);
+    } else if (splitInput[0] === "cat" && splitInput.length === 2) {
+      cat(__dirname, splitInput[1]);
+    } else if (splitInput[0] === "add" && splitInput.length === 2) {
+      add(__dirname, splitInput[1]);
+    } else if (splitInput[0] === "rn" && splitInput.length === 3) {
+      rename(__dirname, splitInput[1], splitInput[2]);
+    } else if (splitInput[0] === "cp" && splitInput.length === 3) {
       copy(__dirname, splitInput[1], splitInput[2]);
-    } else if (input.slice(0, 2) === "rm") {
-      const splitInput = input.split(" ");
+    } else if (splitInput[0] === "rm" && splitInput.length === 2) {
       remove(__dirname, splitInput[1]);
-    } else if (input.slice(0, 2) === "mv") {
-      const splitInput = input.split(" ");
+    } else if (splitInput[0] === "mv" && splitInput.length === 3) {
       move(__dirname, splitInput[1], splitInput[2]);
     } else {
       invalidInputException();
