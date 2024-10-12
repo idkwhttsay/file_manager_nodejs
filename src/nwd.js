@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { invalidInputException, operationFailedException } from "./errors.js";
 
 const HOME = process.env.HOME;
 
@@ -20,7 +21,7 @@ const up = (currentDir) => {
   if (newDir.startsWith(HOME)) {
     return newDir;
   } else {
-    console.log("Operation failed");
+    operationFailedException();
     return currentDir;
   }
 };
@@ -28,7 +29,7 @@ const up = (currentDir) => {
 const cd = (currentDir, pathToDirectory) => {
   pathToDirectory = path.normalize(path.join(currentDir, pathToDirectory));
   if (!fs.existsSync(pathToDirectory)) {
-    console.log("Operation failed");
+    invalidInputException();
     return null;
   }
 
@@ -38,7 +39,7 @@ const cd = (currentDir, pathToDirectory) => {
   ) {
     return pathToDirectory;
   } else {
-    console.log("Operation failed");
+    operationFailedException();
     return currentDir;
   }
 };

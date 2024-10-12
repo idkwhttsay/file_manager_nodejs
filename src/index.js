@@ -8,6 +8,7 @@ import {
   printHomedir,
   printUsername,
 } from "./OS.js";
+import { invalidInputException } from "./errors.js";
 
 const login = () => {
   const args = process.argv[2];
@@ -34,6 +35,7 @@ const login = () => {
         __dirname = newPath;
       }
     } else if (input.slice(0, 2) === "os") {
+      // TODO: Refactor, place in the separate function to pass second parameter
       if (input.slice(3) === "--EOL") {
         printEOL();
       } else if (input.slice(3) === "--cpus") {
@@ -45,7 +47,7 @@ const login = () => {
       } else if (input.slice(3) === "--architecture") {
         printArchitecture();
       } else {
-        console.log("Invalid input");
+        invalidInputException();
       }
     } else if (input.slice(0, 4) === "hash") {
       calculateHash(__dirname, input.slice(5));
