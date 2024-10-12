@@ -1,5 +1,12 @@
 import { up, ls, cd } from "./nwd.js";
 import path from "path";
+import {
+  printArchitecture,
+  printCpus,
+  printEOL,
+  printHomedir,
+  printUsername,
+} from "./OS.js";
 
 const login = () => {
   const args = process.argv[2];
@@ -24,6 +31,20 @@ const login = () => {
       const newPath = cd(__dirname, input.slice(3));
       if (newPath != null) {
         __dirname = newPath;
+      }
+    } else if (input.slice(0, 2) === "os") {
+      if (input.slice(3) === "--EOL") {
+        printEOL();
+      } else if (input.slice(3) === "--cpus") {
+        printCpus();
+      } else if (input.slice(3) === "--homedir") {
+        printHomedir();
+      } else if (input.slice(3) === "--username") {
+        printUsername();
+      } else if (input.slice(3) === "--architecture") {
+        printArchitecture();
+      } else {
+        console.log("Invalid input");
       }
     }
 
