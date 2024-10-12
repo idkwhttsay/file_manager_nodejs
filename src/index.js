@@ -7,6 +7,7 @@ import { add, cat, copy, move, remove, rename } from "./file-operations.js";
 import {
   invalidInputException,
   printCurrentFolder,
+  printHelp,
 } from "./errors-and-checks.js";
 
 const YELLOW = "\x1b[33m";
@@ -32,6 +33,13 @@ const login = () => {
   console.log(
     `Welcome to the File Manager, ${YELLOW}${userName}${DEFAULT_COLOR}!`,
   );
+  console.log(
+    `Type ${YELLOW}'.exit'${DEFAULT_COLOR} to exit the File Manager.`,
+  );
+  console.log(
+    `Type ${YELLOW}'--help'${DEFAULT_COLOR} to see list of available commands.`,
+  );
+
   printCurrentFolder(__dirname);
 
   process.stdin.on("data", async (chunk) => {
@@ -43,6 +51,8 @@ const login = () => {
         `Thank you for using File Manager, ${YELLOW}${userName}${DEFAULT_COLOR}, goodbye!`,
       );
       process.exit();
+    } else if (splitInput[0] === "--help" && splitInput.length === 1) {
+      printHelp();
     } else if (splitInput[0] === "up" && splitInput.length === 1) {
       __dirname = up(__dirname);
     } else if (splitInput[0] === "ls" && splitInput.length === 1) {

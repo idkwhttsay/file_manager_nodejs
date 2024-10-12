@@ -1,4 +1,5 @@
 import fs from "fs/promises";
+import fsSync from "fs";
 import path from "path";
 import {
   checkExistsDirectory,
@@ -11,15 +12,29 @@ const FILE = "file";
 const DIRECTORY = "directory";
 
 const ls = async (currentDir) => {
-  const files = await fs.readdir(currentDir);
+  const content = await fs.readdir(currentDir);
 
-  return files.map((file) => {
-    const isDirectory = path.extname(file);
-    return {
-      Name: file,
-      Type: isDirectory.length > 0 ? FILE : DIRECTORY,
-    };
+  const entries = [];
+
+  content.forEach((file) => {
+    const filePath = path.join(currentDir, file);
+    const stat = fsSync.lstatSync(filePath);
+
+    if (stat.isDirectory()) {
+      entries.push({ Name: file, Type: DIRECTORY });
+    } else {
+      entries.push({ Name: file, Type: FILE });
+    }
   });
+
+  entries.sort((a, b) => {
+    if (a.Type === b.Type) {
+      return a.Name.localeCompare(b.Name);
+    }
+    return a.Type === DIRECTORY ? -1 : 1;
+  });
+
+  return entries;
 };
 
 const up = (currentDir) => {

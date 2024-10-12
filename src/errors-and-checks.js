@@ -8,6 +8,59 @@ const DEFAULT_COLOR = "\x1b[0m";
 const YELLOW = "\x1b[33m";
 const GREEN = "\x1b[32m";
 
+const commands = [
+  { command: "up", description: "Go upper from current directory" },
+  {
+    command: "cd path_to_directory",
+    description:
+      "Go to dedicated folder from current directory (path_to_directory can be relative or absolute)",
+  },
+  {
+    command: "cat path_to_file",
+    description: "List of all files and folders in current directory",
+  },
+  {
+    command: "cat path_to_file",
+    description: "Read file and print it's content in console",
+  },
+  {
+    command: "add new_file_name",
+    description: "Create empty file in current working directory",
+  },
+  {
+    command: "rn path_to_file new_filename",
+    description: "Rename file",
+  },
+  {
+    command: "cp path_to_file path_to_new_directory",
+    description: "Copy file",
+  },
+  {
+    command: "mv path_to_file path_to_new_directory",
+    description: "Move file",
+  },
+  { command: "os --EOL", description: "Get EOL" },
+  { command: "os --cpus", description: "Get host machine CPUs info " },
+  {
+    command: "os --homedir",
+    description: "Get home directory and print it to console",
+  },
+  { command: "os --username", description: "Get current system user name" },
+  { command: "os --architecture", description: "Get CPU architecture" },
+  {
+    command: "hash path_to_file",
+    description: "Calculate hash for file and print it into console",
+  },
+  {
+    command: "compress path_to_file path_to_destination",
+    description: "Compress file",
+  },
+  {
+    command: "decompress path_to_file path_to_destination",
+    description: "Decompress file",
+  },
+];
+
 const formAbsolutePath = (currentDir, pathToDir) => {
   let resultPath;
   if (!pathToDir.startsWith(HOME)) {
@@ -17,6 +70,14 @@ const formAbsolutePath = (currentDir, pathToDir) => {
   }
 
   return resultPath;
+};
+
+const printHelp = () => {
+  commands.map((value) => {
+    console.log(
+      `${YELLOW}${value.command}${DEFAULT_COLOR}: ${value.description}`,
+    );
+  });
 };
 
 const checkRoot = (absolutePath) => {
@@ -58,4 +119,5 @@ export {
   checkExistsDirectory,
   printCurrentFolder,
   successMessage,
+  printHelp,
 };
