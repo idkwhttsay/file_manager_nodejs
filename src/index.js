@@ -1,32 +1,33 @@
-import os from "os";
-import { up } from "./nwd/up.js";
-import { ls } from "./nwd/ls.js";
-import { cd } from "./nwd/cd.js";
+import { up, ls, cd } from "./nwd.js";
+import path from "path";
 
 const login = () => {
   const args = process.argv[2];
   const userName = args.slice(11);
 
-  let __dirname = os.homedir();
+  let __dirname = path.resolve(process.env.HOME || process.env.USER_PROFILE);
 
   console.log(`Welcome to the File Manager, ${userName}!`);
   console.log(`You are currently in ${__dirname}`);
 
   process.stdin.on("data", (chunk) => {
-    chunk = chunk.toString().trim();
-    const input = chunk.split(" ");
+    const input = chunk.toString().trim();
 
-    if (input[0] === ".exit") {
+    if (input === ".exit") {
       console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
       process.exit();
-    } else if (input[0] === "up") {
+    } else if (input === "up") {
       __dirname = up(__dirname);
-      console.log(`You are currently in ${__dirname}`);
-    } else if (input[0] === "ls") {
+    } else if (input === "ls") {
       console.table(ls(__dirname));
-    } else if (input[0] === "cd") {
-      cd();
+    } else if (input.slice(0, 2) === "cd") {
+      const newPath = cd(__dirname, input.slice(3));
+      if (newPath != null) {
+        __dirname = newPath;
+      }
     }
+
+    console.log(`You are currently in ${__dirname}`);
   });
 };
 
