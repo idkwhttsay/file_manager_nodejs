@@ -6,10 +6,8 @@ import {
   checkRoot,
   formAbsolutePath,
   invalidInputException,
-  operationFailedException,
 } from "./errors_and_checks.js";
 
-const HOME = process.env.HOME;
 const FILE = "file";
 const DIRECTORY = "directory";
 
