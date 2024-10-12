@@ -1,4 +1,5 @@
 import fs from "fs";
+import fs_promise from "fs/promises";
 import path from "path";
 import {
   checkExistsDirectory,
@@ -12,8 +13,10 @@ const HOME = process.env.HOME;
 const FILE = "file";
 const DIRECTORY = "directory";
 
-const ls = (currentDir) => {
-  return fs.readdirSync(currentDir).map((file, index) => {
+const ls = async (currentDir) => {
+  const files = await fs_promise.readdir(currentDir);
+
+  return files.map((file) => {
     const isDirectory = path.extname(file);
     return {
       Name: file,
