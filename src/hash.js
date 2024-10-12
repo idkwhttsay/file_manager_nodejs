@@ -8,6 +8,7 @@ const calculateHash = (currentDir, pathToFile) => {
 
   // TODO: Check if User not above root folder
 
+  // TODO: Make a separate function to validate a path
   if (!fs.existsSync(fullPath) || path.extname(fullPath).length === 0) {
     invalidInputException();
     return;

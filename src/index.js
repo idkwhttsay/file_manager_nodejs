@@ -9,6 +9,7 @@ import {
   printUsername,
 } from "./OS.js";
 import { invalidInputException } from "./errors.js";
+import { compress, decompress } from "./brzip.js";
 
 const login = () => {
   const args = process.argv[2];
@@ -51,6 +52,13 @@ const login = () => {
       }
     } else if (input.slice(0, 4) === "hash") {
       calculateHash(__dirname, input.slice(5));
+    } else if (input.slice(0, 8) === "compress") {
+      const splitInput = input.split(" ");
+      // TODO: validate splitInput
+      compress(__dirname, splitInput[1].toString(), splitInput[2].toString());
+    } else if (input.slice(0, 10) === "decompress") {
+      const splitInput = input.split(" ");
+      decompress(__dirname, splitInput[1].toString(), splitInput[2].toString());
     }
 
     console.log(`You are currently in ${__dirname}\n`);
