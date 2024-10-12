@@ -25,12 +25,12 @@ const checkRoot = (absolutePath) => {
 
 const checkExistsDirectory = (pathToDirectory) => {
   return (
-    fs.existsSync(pathToDirectory) && path.extname(pathToDirectory).length === 0
+    fs.existsSync(pathToDirectory) && fs.statSync(pathToDirectory).isDirectory()
   );
 };
 
 const checkExistsFile = (pathToFile) => {
-  return fs.existsSync(pathToFile) && path.extname(pathToFile).length !== 0;
+  return fs.existsSync(pathToFile) && !fs.statSync(pathToFile).isDirectory();
 };
 
 const operationFailedException = () => {

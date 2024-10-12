@@ -51,8 +51,6 @@ const decompress = (currentDir, pathToFile, pathToDestination) => {
   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
   let fullPathToDestination = formAbsolutePath(currentDir, pathToDestination);
 
-  console.log(fullPathToFile);
-  console.log(path.extname(fullPathToFile));
   if (
     !checkExistsFile(fullPathToFile) ||
     !checkRoot(fullPathToFile) ||
