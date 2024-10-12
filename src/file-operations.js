@@ -1,12 +1,15 @@
 import {
+  checkExistsDirectory,
   checkExistsFile,
   checkRoot,
   formAbsolutePath,
   invalidInputException,
   operationFailedException,
+  successMessage,
 } from "./errors-and-checks.js";
 import fs from "fs";
 import * as console from "node:console";
+import path from "path";
 
 const cat = (currentDir, pathToFile) => {
   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
@@ -23,7 +26,7 @@ const cat = (currentDir, pathToFile) => {
   });
 
   readStream.on("end", () => {
-    console.log("File reading complete");
+    successMessage();
   });
 
   readStream.on("error", () => {
@@ -39,24 +42,32 @@ const add = (currentDir, fileName) => {
     return;
   }
 
-  fs.writeFile(fullPath, "", () => {
-    console.log("File created successfully");
+  fs.writeFile(fullPath, "", (error) => {
+    if (error) {
+      operationFailedException();
+    }
+
+    successMessage();
   });
 };
 
-// const rename = (currentDir, pathToFile, newFileName) => {
-//   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
-//   const pathToRenamedFile = formAbsolutePath();
-//
-//   if (
-//     !checkRoot(fullPath) ||
-//     (!checkExistsFile(fullPath) && !checkExistsDirectory(fullPath))
-//   ) {
-//     invalidInputException();
-//     return;
-//   }
-//
-//   fs.rename(fullPath);
-// };
+const rename = (currentDir, pathToFile, newFileName) => {
+  const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
+  const pathToRenamedFile = formAbsolutePath(
+    path.join(fullPathToFile, "../"),
+    newFileName,
+  );
 
-export { cat, add };
+  console.log(fullPathToFile);
+  console.log(pathToRenamedFile);
+
+  fs.rename(fullPathToFile, pathToRenamedFile, (error) => {
+    if (error) {
+      operationFailedException();
+    }
+
+    successMessage();
+  });
+};
+
+export { cat, add, rename };

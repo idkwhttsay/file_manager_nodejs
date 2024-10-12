@@ -8,6 +8,7 @@ import {
   formAbsolutePath,
   invalidInputException,
   operationFailedException,
+  successMessage,
 } from "./errors-and-checks.js";
 
 const compress = (currentDir, pathToFile, pathToDestination) => {
@@ -38,7 +39,7 @@ const compress = (currentDir, pathToFile, pathToDestination) => {
     .pipe(brotli)
     .pipe(writeStream)
     .on("finish", () => {
-      console.log("File successfully compressed.");
+      successMessage();
     });
 
   readStream.on("error", () => {
@@ -80,7 +81,7 @@ const decompress = (currentDir, pathToFile, pathToDestination) => {
     .pipe(brotli)
     .pipe(writeStream)
     .on("finish", () => {
-      console.log("File successfully decompressed.");
+      successMessage();
     });
 
   readStream.on("error", () => {

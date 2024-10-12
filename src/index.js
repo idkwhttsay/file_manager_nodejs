@@ -3,7 +3,8 @@ import { calculateHash } from "./hash.js";
 import path from "path";
 import { printOS } from "./OS.js";
 import { compress, decompress } from "./brzip.js";
-import { add, cat } from "./file-operations.js";
+import { add, cat, rename } from "./file-operations.js";
+import { printCurrentFolder } from "./errors-and-checks.js";
 
 const login = () => {
   const args = process.argv[2];
@@ -12,7 +13,7 @@ const login = () => {
   let __dirname = path.resolve(process.env.HOME || process.env.USER_PROFILE);
 
   console.log(`Welcome to the File Manager, ${userName}!`);
-  console.log(`You are currently in ${__dirname}`);
+  printCurrentFolder(__dirname);
 
   process.stdin.on("data", async (chunk) => {
     const input = chunk.toString().trim();
@@ -45,9 +46,12 @@ const login = () => {
       cat(__dirname, input.slice(4));
     } else if (input.slice(0, 3) === "add") {
       add(__dirname, input.slice(4));
+    } else if (input.slice(0, 2) === "rn") {
+      const splitInput = input.split(" ");
+      rename(__dirname, splitInput[1].toString(), splitInput[2].toString());
     }
 
-    console.log(`You are currently in ${__dirname}\n`);
+    printCurrentFolder(__dirname);
   });
 };
 

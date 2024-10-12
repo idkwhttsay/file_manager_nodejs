@@ -6,6 +6,7 @@ import {
   formAbsolutePath,
   checkRoot,
   checkExistsFile,
+  successMessage,
 } from "./errors-and-checks.js";
 
 const calculateHash = (currentDir, pathToFile) => {
@@ -25,6 +26,7 @@ const calculateHash = (currentDir, pathToFile) => {
   const readableStream = fs.createReadStream(fullPath);
 
   readableStream.pipe(hash).on("finish", () => {
+    successMessage();
     console.log(`SHA 256 of a file: ${hash.digest()}`);
   });
 
