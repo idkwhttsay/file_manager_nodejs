@@ -1,5 +1,5 @@
 import os from "os";
-import { invalidInputException } from "./errors_and_checks.js";
+import { invalidInputException } from "./errors-and-checks.js";
 
 const printOS = (operation) => {
   if (operation === "--EOL") {

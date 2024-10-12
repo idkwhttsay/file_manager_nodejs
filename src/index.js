@@ -3,6 +3,7 @@ import { calculateHash } from "./hash.js";
 import path from "path";
 import { printOS } from "./OS.js";
 import { compress, decompress } from "./brzip.js";
+import { add, cat } from "./file-operations.js";
 
 const login = () => {
   const args = process.argv[2];
@@ -38,7 +39,12 @@ const login = () => {
       compress(__dirname, splitInput[1].toString(), splitInput[2].toString());
     } else if (input.slice(0, 10) === "decompress") {
       const splitInput = input.split(" ");
+      // TODO: validate splitInput
       decompress(__dirname, splitInput[1].toString(), splitInput[2].toString());
+    } else if (input.slice(0, 3) === "cat") {
+      cat(__dirname, input.slice(4));
+    } else if (input.slice(0, 3) === "add") {
+      add(__dirname, input.slice(4));
     }
 
     console.log(`You are currently in ${__dirname}\n`);

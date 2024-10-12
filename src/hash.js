@@ -6,7 +6,7 @@ import {
   formAbsolutePath,
   checkRoot,
   checkExistsFile,
-} from "./errors_and_checks.js";
+} from "./errors-and-checks.js";
 
 const calculateHash = (currentDir, pathToFile) => {
   const fullPath = formAbsolutePath(currentDir, pathToFile);

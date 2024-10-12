@@ -1,18 +1,17 @@
-import fs from "fs";
-import fs_promise from "fs/promises";
+import fs from "fs/promises";
 import path from "path";
 import {
   checkExistsDirectory,
   checkRoot,
   formAbsolutePath,
   invalidInputException,
-} from "./errors_and_checks.js";
+} from "./errors-and-checks.js";
 
 const FILE = "file";
 const DIRECTORY = "directory";
 
 const ls = async (currentDir) => {
-  const files = await fs_promise.readdir(currentDir);
+  const files = await fs.readdir(currentDir);
 
   return files.map((file) => {
     const isDirectory = path.extname(file);

@@ -8,7 +8,7 @@ import {
   formAbsolutePath,
   invalidInputException,
   operationFailedException,
-} from "./errors_and_checks.js";
+} from "./errors-and-checks.js";
 
 const compress = (currentDir, pathToFile, pathToDestination) => {
   const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
