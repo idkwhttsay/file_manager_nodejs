@@ -2,66 +2,90 @@ import fs from "fs";
 import path from "path";
 import zlib from "zlib";
 import {
+  checkExistsDirectory,
+  checkExistsFile,
+  checkRoot,
+  formAbsolutePath,
   invalidInputException,
   operationFailedException,
 } from "./errors_and_checks.js";
 
 const compress = (currentDir, pathToFile, pathToDestination) => {
-  // TODO: consider absolute paths
+  const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
+  let fullPathToDestination = formAbsolutePath(currentDir, pathToDestination);
 
-  const fullPathToFile = path.normalize(path.join(currentDir, pathToFile));
-  const fullPathToDestination = path.normalize(
-    path.join(currentDir, pathToDestination, "archive.br"),
-  );
-
-  if (!fs.existsSync(fullPathToFile)) {
+  if (!checkExistsFile(fullPathToFile) || !checkRoot(fullPathToFile)) {
     invalidInputException();
     return;
   }
 
-  const readableStream = fs.createReadStream(fullPathToFile);
-  const writableStream = fs.createWriteStream(fullPathToDestination);
+  if (
+    !checkExistsDirectory(fullPathToDestination) ||
+    !checkRoot(fullPathToDestination)
+  ) {
+    invalidInputException();
+    return;
+  }
 
-  const brotliCompression = zlib.createBrotliCompress();
+  fullPathToDestination = path.join(fullPathToDestination, "compressed.br");
 
-  // TODO try/catch, error = operationFailedException
-  readableStream
-    .pipe(brotliCompression)
-    .pipe(writableStream)
+  const readStream = fs.createReadStream(fullPathToFile);
+  const writeStream = fs.createWriteStream(fullPathToDestination);
+
+  const brotli = zlib.createBrotliCompress();
+
+  readStream
+    .pipe(brotli)
+    .pipe(writeStream)
     .on("finish", () => {
       console.log("File successfully compressed.");
     });
+
+  readStream.on("error", () => {
+    operationFailedException();
+  });
 };
 
-// TODO: Fix decompress
 const decompress = (currentDir, pathToFile, pathToDestination) => {
-  // TODO: consider absolute paths
-  const fullPathToFile = path.normalize(path.join(currentDir, pathToFile));
-  const fullPathToDestination = path.normalize(
-    path.join(currentDir, pathToDestination),
-  );
+  const fullPathToFile = formAbsolutePath(currentDir, pathToFile);
+  let fullPathToDestination = formAbsolutePath(currentDir, pathToDestination);
 
-  // TODO: make separate function for checking
+  console.log(fullPathToFile);
+  console.log(path.extname(fullPathToFile));
   if (
-    !fs.existsSync(fullPathToFile) ||
+    !checkExistsFile(fullPathToFile) ||
+    !checkRoot(fullPathToFile) ||
     path.extname(fullPathToFile) !== ".br"
   ) {
     invalidInputException();
     return;
   }
 
-  const readableStream = fs.createReadStream(fullPathToFile);
-  const writableStream = fs.createWriteStream(fullPathToDestination);
+  if (
+    !checkExistsDirectory(fullPathToDestination) ||
+    !checkRoot(fullPathToDestination)
+  ) {
+    invalidInputException();
+    return;
+  }
 
-  const brotliDecompression = zlib.createBrotliDecompress();
+  fullPathToDestination = path.join(fullPathToDestination, "decompressed.txt");
 
-  // TODO try/catch, error = operationFailedException
-  readableStream
-    .pipe(brotliDecompression)
-    .pipe(writableStream)
+  const readStream = fs.createReadStream(fullPathToFile);
+  const writeStream = fs.createWriteStream(fullPathToDestination);
+
+  const brotli = zlib.createBrotliDecompress();
+
+  readStream
+    .pipe(brotli)
+    .pipe(writeStream)
     .on("finish", () => {
       console.log("File successfully decompressed.");
     });
+
+  readStream.on("error", () => {
+    operationFailedException();
+  });
 };
 
 export { compress, decompress };
