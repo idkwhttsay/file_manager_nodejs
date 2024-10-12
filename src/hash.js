@@ -27,7 +27,7 @@ const calculateHash = (currentDir, pathToFile) => {
 
   readableStream.pipe(hash).on("finish", () => {
     successMessage();
-    console.log(`SHA 256 of a file: ${hash.digest()}`);
+    console.log(`SHA 256 of a file: ${hash.digest("hex")}`);
   });
 
   readableStream.on("error", () => {

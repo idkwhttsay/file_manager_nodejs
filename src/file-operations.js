@@ -59,9 +59,6 @@ const rename = (currentDir, pathToFile, newFileName) => {
     newFileName,
   );
 
-  console.log(fullPathToFile);
-  console.log(pathToRenamedFile);
-
   fs.rename(fullPathToFile, pathToRenamedFile, (error) => {
     if (error) {
       operationFailedException();
