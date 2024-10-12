@@ -1,23 +1,20 @@
 import os from "os";
+import { invalidInputException } from "./errors_and_checks.js";
 
-const printEOL = () => {
-  console.log(os.EOL);
+const printOS = (operation) => {
+  if (operation === "--EOL") {
+    console.log(os.EOL);
+  } else if (operation === "--cpus") {
+    console.table(os.cpus());
+  } else if (operation === "--homedir") {
+    console.log(os.homedir());
+  } else if (operation === "--username") {
+    console.log(os.hostname());
+  } else if (operation === "--architecture") {
+    console.log(os.arch());
+  } else {
+    invalidInputException();
+  }
 };
 
-const printCpus = () => {
-  console.table(os.cpus());
-};
-
-const printHomedir = () => {
-  console.log(os.homedir());
-};
-
-const printUsername = () => {
-  console.log(os.hostname());
-};
-
-const printArchitecture = () => {
-  console.log(os.arch());
-};
-
-export { printArchitecture, printEOL, printCpus, printUsername, printHomedir };
+export { printOS };

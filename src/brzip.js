@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
 import zlib from "zlib";
-import { invalidInputException, operationFailedException } from "./errors.js";
+import {
+  invalidInputException,
+  operationFailedException,
+} from "./errors_and_checks.js";
 
 const compress = (currentDir, pathToFile, pathToDestination) => {
   // TODO: consider absolute paths

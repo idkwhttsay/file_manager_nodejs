@@ -1,15 +1,22 @@
-import path from "path";
 import fs from "fs";
 import crypto from "crypto";
-import { invalidInputException, operationFailedException } from "./errors.js";
+import {
+  invalidInputException,
+  operationFailedException,
+  formAbsolutePath,
+  checkRoot,
+  checkExistsFile,
+} from "./errors_and_checks.js";
 
 const calculateHash = (currentDir, pathToFile) => {
-  const fullPath = path.normalize(path.join(currentDir, pathToFile));
+  const fullPath = formAbsolutePath(currentDir, pathToFile);
 
-  // TODO: Check if User not above root folder
+  if (!checkRoot(fullPath)) {
+    invalidInputException();
+    return;
+  }
 
-  // TODO: Make a separate function to validate a path
-  if (!fs.existsSync(fullPath) || path.extname(fullPath).length === 0) {
+  if (!checkExistsFile(fullPath)) {
     invalidInputException();
     return;
   }
