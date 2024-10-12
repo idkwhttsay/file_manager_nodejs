@@ -1,14 +1,16 @@
 import fs from "fs";
+import fs_promise from "fs/promises";
 import path from "path";
 import { invalidInputException, operationFailedException } from "./errors.js";
 
 const HOME = process.env.HOME;
 
-const ls = (currentDir) => {
-  return fs.readdirSync(currentDir).map((file, index) => {
+const ls = async (currentDir) => {
+  const files = await fs_promise.readdir(currentDir);
+
+  return files.map((file) => {
     const isDirectory = path.extname(file);
     return {
-      index: index,
       Name: file,
       Type: isDirectory.length > 0 ? "file" : "directory",
     };

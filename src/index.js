@@ -19,7 +19,7 @@ const login = () => {
   console.log(`Welcome to the File Manager, ${userName}!`);
   console.log(`You are currently in ${__dirname}`);
 
-  process.stdin.on("data", (chunk) => {
+  process.stdin.on("data", async (chunk) => {
     const input = chunk.toString().trim();
 
     if (input === ".exit") {
@@ -28,7 +28,7 @@ const login = () => {
     } else if (input === "up") {
       __dirname = up(__dirname);
     } else if (input === "ls") {
-      console.table(ls(__dirname));
+      console.table(await ls(__dirname));
     } else if (input.slice(0, 2) === "cd") {
       const newPath = cd(__dirname, input.slice(3));
       if (newPath != null) {
